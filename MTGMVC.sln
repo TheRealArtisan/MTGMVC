@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHarness", "TestHarness\TestHarness.csproj", "{F1A6BC81-13C1-4F98-BDE3-728B4545DD41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTG", "MTG\MTG.csproj", "{833AD1D7-4EE1-40B2-96B8-38DD93F968CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F1A6BC81-13C1-4F98-BDE3-728B4545DD41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1A6BC81-13C1-4F98-BDE3-728B4545DD41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1A6BC81-13C1-4F98-BDE3-728B4545DD41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1A6BC81-13C1-4F98-BDE3-728B4545DD41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{833AD1D7-4EE1-40B2-96B8-38DD93F968CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{833AD1D7-4EE1-40B2-96B8-38DD93F968CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{833AD1D7-4EE1-40B2-96B8-38DD93F968CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{833AD1D7-4EE1-40B2-96B8-38DD93F968CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D6087339-ECB1-4160-9AF4-72529FA3579E}
+	EndGlobalSection
+EndGlobal
