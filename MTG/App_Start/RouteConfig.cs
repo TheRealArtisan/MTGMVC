@@ -13,6 +13,24 @@ namespace MTG
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //routes.MapRoute(
+            //    name: "Cards",
+            //    url: "{controller}/{action}/{id}",
+            //    defaults: new { controller = "Cards", action = "Index", id = UrlParameter.Optional }
+            //);
+
+            //routes.MapRoute(
+            //    name: "Decks",
+            //    url: "{controller}/{action}/{id}",
+            //    defaults: new { controller = "Decks", action = "Index", id = UrlParameter.Optional }
+            //);
+
+            //routes.MapRoute(
+            //    name: "Shopping",
+            //    url: "{controller}/{action}/{id}",
+            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            //);
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
