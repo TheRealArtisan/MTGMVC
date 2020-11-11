@@ -61,6 +61,8 @@ namespace MTG.Data.Models
         Leveler,
         [EnumMember(Value = "saga")]
         Saga,
+        [EnumMember(Value = "adventure")]
+        Adventure,
         [EnumMember(Value = "modal_dfc")]
         Modal,
         [EnumMember(Value = "planar")]

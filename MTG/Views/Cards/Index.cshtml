@@ -7,7 +7,7 @@
 
 <div class="panel panel-info">
     <div class="panel-heading">
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("CardPartial"))
         {
             @Html.AntiForgeryToken()
             <div class="form-group row row-no-gutters">
@@ -24,19 +24,14 @@
                     @Html.DropDownListFor(m => m.Format, new SelectList(Enum.GetValues(typeof(Format))), new { @class = "form-control", id = "format" })
                 </div>
             </div>
-            <button type="button" class="btn btn-success">Search</button>
+            <button type="submit" class="btn btn-success" id="search">Search</button>
+
         }
     </div>
-    <div class="panel-body">
-        <div>
-            @foreach (var image in ViewBag.CardImages)
-            {
-                <img src="@image.Value" class="img-rounded" />
-            }
-        </div>
+    <div class="panel-body" id="results">
+        @Html.Action("CardPartial", Model)
     </div>
 </div>
-
 
 
 

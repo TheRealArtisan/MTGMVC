@@ -19,23 +19,40 @@ namespace MTG.Data
                 HttpWebRequest request = WebRequest.CreateHttp($"{baseURL}/{parameters}");
                 request.Method = type.ToString();
 
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                try
                 {
-                    using (Stream stream = response.GetResponseStream())
+                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                     {
-                        using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
-                        {
-                            string json = reader.ReadToEnd();
 
-                            data = JsonConvert.DeserializeObject<T>(json);
+                        using (Stream stream = response.GetResponseStream())
+                        {
+                            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                            {
+                                string json = reader.ReadToEnd();
+
+                                data = JsonConvert.DeserializeObject<T>(json);
+                            }
                         }
                     }
                 }
+                catch (WebException e)
+                {
+                    HttpWebResponse webResponse = (HttpWebResponse)e.Response;
+                    if (webResponse.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        data = default(T);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                
                 return data;
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             finally
             {
