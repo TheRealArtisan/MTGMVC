@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
@@ -21,20 +21,19 @@
                     <li>@Html.ActionLink("Cards", "Index", "Cards")</li>
                     <li>@Html.ActionLink("Decks", "Index", "Decks")</li>
                     <li>@Html.ActionLink("Deck Builder", "Edit", "Decks")</li>
-                    <li>@Html.ActionLink("Shopping", "Index", "Shopping")</li>
                     <li>@Html.ActionLink("Account", "Index", "Account")</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <hr />
+    <div class="container-fluid">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
     </div>
-
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+    </footer>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

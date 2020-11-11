@@ -80,4 +80,13 @@ namespace MTG.Data.Models
         [EnumMember(Value = "host")]
         Host
     }
+
+    public enum Format
+    {
+        Standard,
+        Pioneer,
+        Modern,
+        Legacy,
+        Vintage
+    }
 }

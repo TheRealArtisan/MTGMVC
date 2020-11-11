@@ -1,15 +1,48 @@
-﻿
+﻿@using MTG.Data.Models
+
+@model MTG.Models.SearchModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cards";
 }
 
-<h2>Index</h2>
-
-<div>
-    @foreach (var image in ViewBag.CardImages)
-    {
-        <img src="@image.Value" />
-    }
-
+<div class="panel panel-info">
+    <div class="panel-heading">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group row row-no-gutters">
+                <div class="col-md-4">
+                    @Html.LabelFor(m => m.CardName)
+                    @Html.TextBoxFor(m => m.CardName, new { @class = "form-control", id = "cardname" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(m => m.CardText)
+                    @Html.TextBoxFor(m => m.CardText, new { @class = "form-control", id = "cardtext" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(m => m.Format)
+                    @Html.DropDownListFor(m => m.Format, new SelectList(Enum.GetValues(typeof(Format))), new { @class = "form-control", id = "format" })
+                </div>
+            </div>
+            <button type="button" class="btn btn-success">Search</button>
+        }
+    </div>
+    <div class="panel-body">
+        <div>
+            @foreach (var image in ViewBag.CardImages)
+            {
+                <img src="@image.Value" class="img-rounded" />
+            }
+        </div>
+    </div>
 </div>
+
+
+
+
+
+
+
+
+
 

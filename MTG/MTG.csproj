@@ -155,7 +155,6 @@
     <Compile Include="Controllers\CardsController.cs" />
     <Compile Include="Controllers\DecksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ShoppingController.cs" />
     <Compile Include="Data\Models\Card.cs" />
     <Compile Include="Data\Models\CardFace.cs" />
     <Compile Include="Data\Models\Enums.cs" />
@@ -166,6 +165,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -307,13 +307,11 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Decks\Edit.cshtml" />
     <Content Include="Views\Decks\Index.cshtml" />
-    <Content Include="Views\Shopping\Index.cshtml" />
     <Content Include="Views\Cards\Index.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
