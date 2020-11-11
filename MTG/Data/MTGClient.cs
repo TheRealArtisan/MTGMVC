@@ -11,13 +11,6 @@ namespace MTG.Data
     {
         private string baseURL = "https://api.scryfall.com";
 
-        public void SearchCards(string query)
-        {
-            string parameters = $"cards/search?unique=cards&pretty=true&q={System.Uri.EscapeDataString(query)}";
-
-            Search data = Execute<Search>(MethodType.GET, parameters);
-        }
-
         private T Execute<T>(MethodType type, string parameters)
         {
             try
@@ -48,6 +41,28 @@ namespace MTG.Data
             {
 
             }
+        }
+
+        public Search SearchCards(string query)
+        {
+            string parameters = $"cards/search?unique=cards&pretty=true&q={System.Uri.EscapeDataString(query)}";
+
+            return Execute<Search>(MethodType.GET, parameters);
+        }
+        
+        public string GetImageFromCard(Card card)
+        {
+            if (card.ImageUris?.Small != null)
+            {
+                return card.ImageUris?.Small;
+            }
+
+            if (card.CardFaces[0].ImageUris?.Small != null)
+            {
+                return card.CardFaces[0].ImageUris?.Small;
+            }
+
+            return null;
         }
     }
 

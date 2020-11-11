@@ -47,9 +47,6 @@ namespace MTG.Data.Models
         [JsonProperty(PropertyName = "color_identity")]
         public List<Colours?> ColourIdentity { get; set; }
 
-        //[JsonProperty(PropertyName = "card_faces")]
-        //public List<CardFace> CardFaces { get; set; }
-
         [JsonProperty(PropertyName = "legalities")]
         public Legality Legalities { get; set; }
 
@@ -64,6 +61,12 @@ namespace MTG.Data.Models
 
         [JsonProperty(PropertyName = "set_name")]
         public string SetName { get; set; }
+
+        [JsonProperty(PropertyName = "layout")]
+        public Layouts? Layout { get; set; }
+
+        [JsonProperty(PropertyName = "card_faces")]
+        public List<CardFace> CardFaces { get; set; }
 
         [JsonProperty(PropertyName = "image_uris")]
         public ImageUri ImageUris { get; set; }

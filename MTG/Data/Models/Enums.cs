@@ -44,4 +44,40 @@ namespace MTG.Data.Models
         [EnumMember(Value = "banned")]
         Banned
     }
+
+    public enum Layouts
+    {
+        [EnumMember(Value = "normal")]
+        Normal,
+        [EnumMember(Value = "split")]
+        Split,
+        [EnumMember(Value = "flip")]
+        Flip,
+        [EnumMember(Value = "transform")]
+        Transform,
+        [EnumMember(Value = "meld")]
+        Meld,
+        [EnumMember(Value = "leveler")]
+        Leveler,
+        [EnumMember(Value = "saga")]
+        Saga,
+        [EnumMember(Value = "modal_dfc")]
+        Modal,
+        [EnumMember(Value = "planar")]
+        Planar,
+        [EnumMember(Value = "scheme")]
+        Scheme,
+        [EnumMember(Value = "vanguard")]
+        Vanguard,
+        [EnumMember(Value = "token")]
+        Token,
+        [EnumMember(Value = "double_faced_token")]
+        DoubleFacedToken,
+        [EnumMember(Value = "emblem")]
+        Emblem,
+        [EnumMember(Value = "augment")]
+        Augment,
+        [EnumMember(Value = "host")]
+        Host
+    }
 }

@@ -157,6 +157,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ShoppingController.cs" />
     <Compile Include="Data\Models\Card.cs" />
+    <Compile Include="Data\Models\CardFace.cs" />
     <Compile Include="Data\Models\Enums.cs" />
     <Compile Include="Data\Models\ImageUri.cs" />
     <Compile Include="Data\Models\Legality.cs" />

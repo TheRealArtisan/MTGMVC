@@ -5,3 +5,11 @@
 
 <h2>Index</h2>
 
+<div>
+    @foreach (var image in ViewBag.CardImages)
+    {
+        <img src="@image.Value" />
+    }
+
+</div>
+
