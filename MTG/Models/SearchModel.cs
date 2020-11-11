@@ -1,4 +1,5 @@
-﻿using MTG.Data.Models;
+﻿using MTG.Data;
+using MTG.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,6 +20,33 @@ namespace MTG.Models
         [Display(Name = "Colours")]
         public Dictionary<Colours, bool> Colours { get; set; }
 
+        public int Page { get; set; } = 1;
+
+        public Search Data { get; set; }
+        
+        public Search Search()
+        {
+            MTGClient client = new MTGClient();
+
+            List<string> querys = new List<string>();
+
+            querys.Add($"f:{Format}");
+            if (!string.IsNullOrWhiteSpace(CardName))
+            {
+                querys.Add(CardName);
+            }
+            if (!string.IsNullOrWhiteSpace(CardText))
+            {
+                querys.Add($"o:'{CardText}'");
+            }
+
+            string q = string.Join(" ", querys);
+
+            Data = client.SearchCards(q, Page);
+
+            return Data;
+        }
+        
         public static bool IsEmpty(SearchModel model)
         {
             try

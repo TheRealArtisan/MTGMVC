@@ -13,66 +13,94 @@ namespace MTG.Controllers
     {
         public ActionResult Index(SearchModel model)
         {
-            if (SearchModel.IsEmpty(model))
-            {
-                model = ViewBag.SearchModel;
-                if (SearchModel.IsEmpty(model))
-                {
-                    model = new SearchModel() { Format = Format.Standard };
-                }
-            }
-
-            ViewBag.SearchModel = model;
-
-            ViewBag.SearchModel = model;
+            Validate(ref model);
 
             return View(model);
         }
 
-        public ActionResult CardPartial(SearchModel model)
+        public ActionResult CardPartial(SearchModel model, string search, string next, string prev)
+        {
+            if (!string.IsNullOrWhiteSpace(next))
+            {
+                model = Session["SearchModel"] as SearchModel;
+                model.Page++;
+            }
+            if (!string.IsNullOrWhiteSpace(prev))
+            {
+                model = Session["SearchModel"] as SearchModel;
+                model.Page--;
+            }
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                
+            }
+
+            Validate(ref model);
+
+            model.Search();
+
+            Session["SearchModel"] = model;
+
+            SetImages(model.Data);
+
+            return PartialView("CardPartial", model);
+        }
+        //public ActionResult CardPartialNext()
+        //{
+        //    SearchModel model = null;
+        //    Validate(ref model);
+
+        //    model.NextPage();
+
+        //    Session["SearchModel"] = model;
+
+        //    SetImages(model.Data);
+
+        //    return PartialView("CardPartial", model);
+        //}
+
+        //public ActionResult CardPartialPrevious()
+        //{
+        //    SearchModel model = null;
+        //    Validate(ref model);
+
+        //    model.PreviousPage();
+
+        //    Session["SearchModel"] = model;
+
+        //    SetImages(model.Data);
+
+        //    return PartialView("CardPartial", model);
+        //}
+
+        public SearchModel Validate(ref SearchModel model)
         {
             if (SearchModel.IsEmpty(model))
             {
-                model = ViewBag.SearchModel;
+                model = Session["SearchModel"] as SearchModel;
                 if (SearchModel.IsEmpty(model))
                 {
-                    model = new SearchModel() { Format = Format.Standard };
+                    model = new SearchModel() { Format = Format.Standard, };
                 }
             }
 
-            ViewBag.SearchModel = model;
+            return model;
+        }
 
-            MTGClient client = new MTGClient();
-
-            List<string> querys = new List<string>();
-
-            querys.Add($"f:{model.Format}");
-            if (!string.IsNullOrWhiteSpace(model.CardName))
-            {
-                querys.Add(model.CardName);
-            }
-            if (!string.IsNullOrWhiteSpace(model.CardText))
-            {
-                querys.Add($"o:'{model.CardText}'");
-            }
-
-            string q = string.Join(" ", querys);
-
-            Search data = client.SearchCards(q);
-
+        public void SetImages(Search data)
+        {
             Dictionary<string, string> images = new Dictionary<string, string>();
 
             if (data != null)
             {
                 foreach (var card in data.Data)
                 {
+                    MTGClient client = new MTGClient();
                     images.Add(card.OracleId, client.GetImageFromCard(card));
                 }
             }
 
             ViewBag.CardImages = images;
-
-            return PartialView("CardPartial");
         }
     }
 }

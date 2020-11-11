@@ -60,9 +60,9 @@ namespace MTG.Data
             }
         }
 
-        public Search SearchCards(string query)
+        public Search SearchCards(string query, int page = 1)
         {
-            string parameters = $"cards/search?unique=cards&pretty=true&q={System.Uri.EscapeDataString(query)}";
+            string parameters = $"cards/search?unique=cards&page={page}&q={System.Uri.EscapeDataString(query)}";
 
             return Execute<Search>(MethodType.GET, parameters);
         }
