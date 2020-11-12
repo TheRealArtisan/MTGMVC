@@ -3,8 +3,6 @@ using MTG.Data.Models;
 using MTG.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MTG.Controllers
@@ -45,33 +43,6 @@ namespace MTG.Controllers
 
             return PartialView("CardPartial", model);
         }
-        //public ActionResult CardPartialNext()
-        //{
-        //    SearchModel model = null;
-        //    Validate(ref model);
-
-        //    model.NextPage();
-
-        //    Session["SearchModel"] = model;
-
-        //    SetImages(model.Data);
-
-        //    return PartialView("CardPartial", model);
-        //}
-
-        //public ActionResult CardPartialPrevious()
-        //{
-        //    SearchModel model = null;
-        //    Validate(ref model);
-
-        //    model.PreviousPage();
-
-        //    Session["SearchModel"] = model;
-
-        //    SetImages(model.Data);
-
-        //    return PartialView("CardPartial", model);
-        //}
 
         public SearchModel Validate(ref SearchModel model)
         {
@@ -89,17 +60,16 @@ namespace MTG.Controllers
 
         public void SetImages(Search data)
         {
-            Dictionary<string, string> images = new Dictionary<string, string>();
+            Dictionary<string, Tuple<string, string>> images = new Dictionary<string, Tuple<string, string>>();
 
             if (data != null)
             {
                 foreach (var card in data.Data)
                 {
                     MTGClient client = new MTGClient();
-                    images.Add(card.OracleId, client.GetImageFromCard(card));
+                    images.Add(card.OracleId, new Tuple<string, string>(client.GetImageFromCard(card), card.ScryfallUri));
                 }
             }
-
             ViewBag.CardImages = images;
         }
     }

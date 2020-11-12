@@ -1,29 +1,31 @@
-﻿@using MTG.Data.Models
+﻿
+@using MTG.Data.Models
 
 @model MTG.Models.SearchModel
+
 @{
     ViewBag.Title = "Cards";
 }
 
 <div class="panel panel-info">
     <div class="panel-heading">
-        @using (Html.BeginForm("CardPartial"))
+        @using (Html.BeginForm("Index", "Cards"))
         {
             @Html.AntiForgeryToken()
-            <div class="form-group row row-no-gutters">
-                <div class="col-md-4">
-                    @Html.LabelFor(m => m.CardName)
-                    @Html.TextBoxFor(m => m.CardName, new { @class = "form-control", id = "cardname" })
-                </div>
-                <div class="col-md-4">
-                    @Html.LabelFor(m => m.CardText)
-                    @Html.TextBoxFor(m => m.CardText, new { @class = "form-control", id = "cardtext" })
-                </div>
-                <div class="col-md-4">
-                    @Html.LabelFor(m => m.Format)
-                    @Html.DropDownListFor(m => m.Format, new SelectList(Enum.GetValues(typeof(Format))), new { @class = "form-control", id = "format" })
-                </div>
+        <div class="form-group row">
+            <div class="col-md-4">
+                @Html.LabelFor(m => m.CardName)
+                @Html.TextBoxFor(m => m.CardName, new { @class = "form-control", id = "cardname" })
             </div>
+            <div class="col-md-4"> 
+                @Html.LabelFor(m => m.CardText)
+                @Html.TextBoxFor(m => m.CardText, new { @class = "form-control", id = "cardtext" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(m => m.Format)
+                @Html.DropDownListFor(m => m.Format, new SelectList(Enum.GetValues(typeof(Format))), new { @class = "form-control", id = "format" })
+            </div>
+        </div>
             <button type="submit" class="btn btn-success" id="search" name="search" value="search">Search</button>
             <button type="submit" class="btn btn-info" id="prev" name="prev" value="prev">Previous</button>
             <button type="submit" class="btn btn-info" id="next" name="next" value="next">Next</button>

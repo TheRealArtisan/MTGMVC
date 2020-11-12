@@ -1,7 +1,67 @@
 ﻿
+@using MTG.Data.Models
+
+@model MTG.Models.DeckModel
+
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Deck Builder";
 }
 
-<h2>Edit</h2>
+<div class="col-md-8">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            @using (Html.BeginForm("Edit", "Decks"))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.SearchModel.CardName)
+                        @Html.TextBoxFor(m => m.SearchModel.CardName, new { @class = "form-control", id = "cardname" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.SearchModel.CardText)
+                        @Html.TextBoxFor(m => m.SearchModel.CardText, new { @class = "form-control", id = "cardtext" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(m => m.SearchModel.Format)
+                        @Html.DropDownListFor(m => m.SearchModel.Format, new SelectList(Enum.GetValues(typeof(Format))), new { @class = "form-control", id = "format" })
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" id="search" name="search" value="search">Search</button>
+                <button type="submit" class="btn btn-info" id="prev" name="prev" value="prev">Previous</button>
+                <button type="submit" class="btn btn-info" id="next" name="next" value="next">Next</button>
+            }
+        </div>
+        <div class="panel-body" id="results">
+            @Html.Action("CardPartial", "Decks")
+        </div>
+    </div>
+</div>
+<div class="col-md-4">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            @using (Html.BeginForm("Edit", "Decks"))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.DeckDetails.DeckName)
+                        @Html.TextBoxFor(m => m.DeckDetails.DeckName, new { @class = "form-control", id = "deckname" })
+                    </div>
+                    
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        @Html.LabelFor(m => m.DeckDetails.DeckDescription)
+                        @Html.TextBoxFor(m => m.DeckDetails.DeckDescription, new { @class = "form-control", id = "deckdesc" })
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" id="save" name="save" value="save">Save</button>
+            }
+        </div>
+        <div class="panel-body" id="deck">
+
+        </div>
+    </div>
+</div>
 

@@ -15,7 +15,7 @@ namespace MTG.Models
         [StringLength(100, ErrorMessage = "Text must be under 100 characters.")]
         public string CardText { get; set; }
         [Display(Name = "Format")]
-        [Required(ErrorMessage = "Please provide a format you want to search.")]
+        [Required(ErrorMessage = "Please select a format you want to search.")]
         public Format? Format { get; set; }
         [Display(Name = "Colours")]
         public Dictionary<Colours, bool> Colours { get; set; }

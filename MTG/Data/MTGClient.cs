@@ -52,7 +52,7 @@ namespace MTG.Data
             }
             catch (Exception e)
             {
-                throw;
+                return default(T);
             }
             finally
             {
