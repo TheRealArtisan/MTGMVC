@@ -16,27 +16,39 @@ namespace MTG.Controllers
         {
             return View();
         }
-
-        public ActionResult Edit(DeckModel model)
+        
+        public ActionResult CreateDeck(DeckModel model, string search, string next, string prev, string save)
         {
-
-            return View(model);
-        }
-
-        public ActionResult CardPartial(DeckModel model, string search, string next, string prev, string save)
-        {
-            SearchModel searchModel = model.SearchModel;
-
             if (!string.IsNullOrWhiteSpace(next))
             {
                 model = Session["DeckModel"] as DeckModel;
-                searchModel.Page++;
+
+                if (model.SearchModel.Data.HasMore.HasValue)
+                {
+                    if (model.SearchModel.Data.HasMore.Value)
+                    {
+                        if (model.SearchModel.Page <= 1)
+                        {
+                            model.SearchModel.Page = 1;
+                        }
+                        model.SearchModel.Page++;
+                    }
+                }
             }
             if (!string.IsNullOrWhiteSpace(prev))
             {
                 model = Session["DeckModel"] as DeckModel;
-                searchModel.Page--;
+
+                if (model.SearchModel.Page <= 1)
+                {
+                    model.SearchModel.Page = 1;
+                }
+
+                model.SearchModel.Page--;
             }
+
+            SearchModel searchModel = model.SearchModel;
+            
             if (!string.IsNullOrWhiteSpace(search))
             {
 
@@ -53,10 +65,10 @@ namespace MTG.Controllers
                     new CardItem()
                     {
                          CardID = "00009876",
-                          Quantity = 3
+                          Quantity = 4
                     }
                 };
-                DataManager.CreateDeck("Test Deck", "This is a test deck.", cardItems);
+                DataManager.CreateDeck(model.DeckDetails.DeckName, model.DeckDetails.DeckDescription, cardItems);
             }
 
             Validate(ref searchModel);
@@ -67,8 +79,60 @@ namespace MTG.Controllers
 
             SetImages(searchModel.Data);
 
-            return PartialView("CardPartial", model);
+            return View("Edit", model);
         }
+        
+        public ActionResult EditDeck(int id)
+        {
+            return View("Edit");
+        }
+
+        //public ActionResult CardPartial(DeckModel model, string search, string next, string prev, string save)
+        //{
+        //    SearchModel searchModel = model.SearchModel;
+
+        //    if (!string.IsNullOrWhiteSpace(next))
+        //    {
+        //        model = Session["DeckModel"] as DeckModel;
+        //        searchModel.Page++;
+        //    }
+        //    if (!string.IsNullOrWhiteSpace(prev))
+        //    {
+        //        model = Session["DeckModel"] as DeckModel;
+        //        searchModel.Page--;
+        //    }
+        //    if (!string.IsNullOrWhiteSpace(search))
+        //    {
+
+        //    }
+        //    if (!string.IsNullOrWhiteSpace(save))
+        //    {
+        //        List<CardItem> cardItems = new List<CardItem>()
+        //        {
+        //            new CardItem()
+        //            {
+        //                 CardID = "00001234",
+        //                  Quantity = 4
+        //            },
+        //            new CardItem()
+        //            {
+        //                 CardID = "00009876",
+        //                  Quantity = 4
+        //            }
+        //        };
+        //        DataManager.CreateDeck(model.DeckDetails.DeckName, model.DeckDetails.DeckDescription, cardItems);
+        //    }
+
+        //    Validate(ref searchModel);
+
+        //    searchModel.Search();
+
+        //    Session["DeckModel"] = model;
+
+        //    SetImages(searchModel.Data);
+
+        //    return PartialView("CardPartial", model);
+        //}
 
         public SearchModel Validate(ref SearchModel model)
         {

@@ -32,7 +32,15 @@
         }
     </div>
     <div class="panel-body" id="results">
-        @Html.Action("CardPartial")
+        @*@Html.Action("CardPartial")*@
+        <div>
+            @foreach (var image in ViewBag.CardImages)
+            {
+                <a href='@image.Value.Item2'>
+                    <img src='@image.Value.Item1' />
+                </a>
+            }
+        </div>
     </div>
 </div>
 

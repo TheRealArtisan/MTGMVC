@@ -9,28 +9,38 @@ namespace MTG.Controllers
 {
     public class CardsController : Controller
     {
-        public ActionResult Index(SearchModel model)
-        {
-            Validate(ref model);
-
-            return View(model);
-        }
-
-        public ActionResult CardPartial(SearchModel model, string search, string next, string prev)
+        public ActionResult Index(SearchModel model, string search, string next, string prev)
         {
             if (!string.IsNullOrWhiteSpace(next))
             {
                 model = Session["SearchModel"] as SearchModel;
-                model.Page++;
+                
+                if (model.Data.HasMore.HasValue)
+                {
+                    if (model.Data.HasMore.Value)
+                    {
+                        if (model.Page <= 1)
+                        {
+                            model.Page = 1;
+                        }
+                        model.Page++;
+                    }
+                }
             }
             if (!string.IsNullOrWhiteSpace(prev))
             {
                 model = Session["SearchModel"] as SearchModel;
+
+                if (model.Page <= 1)
+                {
+                    model.Page = 1;
+                }
+
                 model.Page--;
             }
             if (!string.IsNullOrWhiteSpace(search))
             {
-                
+
             }
 
             Validate(ref model);
@@ -41,8 +51,36 @@ namespace MTG.Controllers
 
             SetImages(model.Data);
 
-            return PartialView("CardPartial", model);
+            return View(model);
         }
+
+        //public ActionResult CardPartial(SearchModel model, string search, string next, string prev)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(next))
+        //    {
+        //        model = Session["SearchModel"] as SearchModel;
+        //        model.Page++;
+        //    }
+        //    if (!string.IsNullOrWhiteSpace(prev))
+        //    {
+        //        model = Session["SearchModel"] as SearchModel;
+        //        model.Page--;
+        //    }
+        //    if (!string.IsNullOrWhiteSpace(search))
+        //    {
+                
+        //    }
+
+        //    Validate(ref model);
+
+        //    model.Search();
+
+        //    Session["SearchModel"] = model;
+
+        //    SetImages(model.Data);
+
+        //    return PartialView("CardPartial", model);
+        //}
 
         public SearchModel Validate(ref SearchModel model)
         {
