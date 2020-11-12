@@ -1,5 +1,6 @@
 ﻿using MTG.Data;
 using MTG.Data.Models;
+using MTG.DataManagement;
 using MTG.Models;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,11 @@ namespace MTG.Controllers
 
         public ActionResult Edit(DeckModel model)
         {
-            
+
             return View(model);
         }
 
-        public ActionResult CardPartial(DeckModel model, string search, string next, string prev)
+        public ActionResult CardPartial(DeckModel model, string search, string next, string prev, string save)
         {
             SearchModel searchModel = model.SearchModel;
 
@@ -40,7 +41,24 @@ namespace MTG.Controllers
             {
 
             }
-            
+            if (!string.IsNullOrWhiteSpace(save))
+            {
+                List<CardItem> cardItems = new List<CardItem>()
+                {
+                    new CardItem()
+                    {
+                         CardID = "00001234",
+                          Quantity = 4
+                    },
+                    new CardItem()
+                    {
+                         CardID = "00009876",
+                          Quantity = 3
+                    }
+                };
+                DataManager.CreateDeck("Test Deck", "This is a test deck.", cardItems);
+            }
+
             Validate(ref searchModel);
 
             searchModel.Search();
