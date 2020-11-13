@@ -105,7 +105,7 @@ namespace MTG.Controllers
                 foreach (var card in data.Data)
                 {
                     MTGClient client = new MTGClient();
-                    images.Add(card.OracleId, new Tuple<string, string>(client.GetImageFromCard(card), card.ScryfallUri));
+                    images.Add(card.Id, new Tuple<string, string>(client.GetImageFromCard(card), card.ScryfallUri));
                 }
             }
             ViewBag.CardImages = images;

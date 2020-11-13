@@ -66,6 +66,11 @@ namespace MTG.Data
 
             return Execute<Search>(MethodType.GET, parameters);
         }
+
+        public Card GetCard(string id)
+        {
+            return Execute<Card>(MethodType.GET, $"cards/{id}");
+        }
         
         public string GetImageFromCard(Card card)
         {

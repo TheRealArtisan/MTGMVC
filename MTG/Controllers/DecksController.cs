@@ -16,7 +16,7 @@ namespace MTG.Controllers
         {
             return View();
         }
-        
+
         public ActionResult EditDeck(DeckModel model, int id, string search, string next, string prev, string save)
         {
             SearchModel searchModel = model.SearchModel;
@@ -25,14 +25,7 @@ namespace MTG.Controllers
             Validate(ref searchModel);
             Validate(ref deckDetailsModel);
 
-            if (id == 0)
-            {
-                deckDetailsModel.CardItems = Session["CardItems"] as List<CardItem>;
-            }
-            else
-            {
-                //deckDetailsModel.CardItems;
-            }
+            
 
             if (!string.IsNullOrWhiteSpace(next))
             {
@@ -69,45 +62,60 @@ namespace MTG.Controllers
             {
                 if (id == 0)
                 {
-                    DataManager.CreateDeck(model.DeckDetails.DeckName, model.DeckDetails.DeckDescription, deckDetailsModel.CardItems);
+                    //DataManager.CreateDeck(model.DeckDetails.DeckName, model.DeckDetails.DeckDescription, deckDetailsModel.CardItems);
                 }
                 else if (id >= 0)
                 {
 
                 }
             }
-            
+
+            var temp = Session["CardItems"] as List<CardItem>;
+            deckDetailsModel.CardItems = temp;
+
             searchModel.Search();
 
             Session["SearchModel"] = searchModel;
             Session["DeckDetailsModel"] = deckDetailsModel;
             Session["CardItems"] = deckDetailsModel.CardItems;
 
+            model.DeckDetails = deckDetailsModel;
+            model.SearchModel = searchModel;
+
             SetImages(searchModel.Data);
 
             return View("Edit", model);
         }
-        
-        //public ActionResult EditDeck(int id)
-        //{
-        //    if (id == 0)
-        //    {
-        //        RedirectToAction("CreateDeck");
-        //    }
-        //    return View("Edit");
-        //}
 
         [HttpPost]
-        public ActionResult AddToDeck(int id, string card)
+        public ActionResult AddToDeck(string add)
         {
-            if (id == 0)
-            {
+            List<CardItem> cards = Session["CardItems"] as List<CardItem>;
 
+            if (cards == null)
+            {
+                cards = new List<CardItem>();
             }
-            string cardid = card;
-            return View();
+
+            CardItem temp = cards.FirstOrDefault(x => x.CardID == add);
+            if (temp == null)
+            {
+                MTGClient client = new MTGClient();
+
+                Card card = client.GetCard(add);
+
+                cards.Add(new CardItem() { CardID = card.Id, Name = card.Name, Quantity = 1 });
+            }
+            else
+            {
+                temp.Quantity++;
+            }
+
+            Session["CardItems"] = cards;
+
+            return RedirectToAction("Edit");
         }
-        
+
         public SearchModel Validate(ref SearchModel model)
         {
             if (SearchModel.IsEmpty(model))
@@ -138,17 +146,31 @@ namespace MTG.Controllers
 
         public void SetImages(Search data)
         {
-            Dictionary<string, Tuple<string, string>> images = new Dictionary<string, Tuple<string, string>>();
+            Dictionary<string, ImageItem> images = new Dictionary<string, ImageItem>();
 
             if (data != null)
             {
                 foreach (var card in data.Data)
                 {
                     MTGClient client = new MTGClient();
-                    images.Add(card.OracleId, new Tuple<string, string>(client.GetImageFromCard(card), card.ScryfallUri));
+                    images.Add(card.Id, new ImageItem(card.Id, card.Name, client.GetImageFromCard(card)));
                 }
             }
             ViewBag.CardImages = images;
+        }
+    }
+
+    public class ImageItem
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string ImageUri { get; set; }
+
+        public ImageItem(string id, string name, string image)
+        {
+            Id = id;
+            Name = name;
+            ImageUri = image;
         }
     }
 }

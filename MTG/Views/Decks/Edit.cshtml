@@ -37,9 +37,13 @@
                 @foreach (var image in ViewBag.CardImages)
                 {
                     <div style="margin: 5px 0px 5px 10px; float: left;">
-                        <img src='@image.Value.Item1' />
+                        <img src='@image.Value.ImageUri' />
                         <br />
-                        <button class="btn btn-default addcard" id="@image.Key">Add</button>
+                        @*<button class="btn btn-default addcard" id="@image.Key" value="@image.Value.Name">Add</button>*@
+                        @using (Html.BeginForm("AddToDeck", "Decks"))
+                        {
+                            <button class="btn btn-default addcard" id="@image.Key" value="@image.Value.Id" name="add">Add</button>
+                        }
                     </div>
                 }
             </div>
@@ -69,7 +73,22 @@
             }
         </div>
         <div class="panel-body" id="deck">
-
+            @if (Model.DeckDetails != null && Model.DeckDetails.CardItems != null)
+            {
+                <table class="table table-hover">
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                    </tr>
+                    @foreach (var d in Model.DeckDetails.CardItems)
+                    {
+                        <tr>
+                            <td>@d.Name</td>
+                            <td>@d.Quantity</td>
+                        </tr>
+                    }
+                </table>
+            }
         </div>
     </div>
 </div>
@@ -100,8 +119,9 @@
                     }
                     });
                 alert(this.id);
-                }*@
-                alert(this.id);
+                }
+                var val = $(this).val();
+                alert(val + ": " + this.id);*@
             });
 
         });
