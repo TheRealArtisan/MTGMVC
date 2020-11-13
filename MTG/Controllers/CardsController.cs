@@ -53,35 +53,7 @@ namespace MTG.Controllers
 
             return View(model);
         }
-
-        //public ActionResult CardPartial(SearchModel model, string search, string next, string prev)
-        //{
-        //    if (!string.IsNullOrWhiteSpace(next))
-        //    {
-        //        model = Session["SearchModel"] as SearchModel;
-        //        model.Page++;
-        //    }
-        //    if (!string.IsNullOrWhiteSpace(prev))
-        //    {
-        //        model = Session["SearchModel"] as SearchModel;
-        //        model.Page--;
-        //    }
-        //    if (!string.IsNullOrWhiteSpace(search))
-        //    {
-                
-        //    }
-
-        //    Validate(ref model);
-
-        //    model.Search();
-
-        //    Session["SearchModel"] = model;
-
-        //    SetImages(model.Data);
-
-        //    return PartialView("CardPartial", model);
-        //}
-
+        
         public SearchModel Validate(ref SearchModel model)
         {
             if (SearchModel.IsEmpty(model))

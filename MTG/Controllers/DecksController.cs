@@ -19,13 +19,32 @@ namespace MTG.Controllers
 
         public ActionResult EditDeck(DeckModel model, int id, string search, string next, string prev, string save)
         {
+            if (id > 0)
+            {
+                DeckDetailsModel deckDetails = Session["DeckDetailsModel"] as DeckDetailsModel;
+                if (DeckDetailsModel.IsEmpty(deckDetails))
+                {
+                    var tuple = DataManager.LoadDeck(id);
+                    var deck = tuple.Item1;
+                    var cards = tuple.Item2;
+
+                    deckDetails = new DeckDetailsModel()
+                    {
+                        DeckName = deck.DeckName,
+                        DeckDescription = deck.DeckDescription,
+                        CardItems = cards.Select(x => new CardItem() { CardID = x.CardId, Quantity = x.CardQuantity, Name = x.CardName}).ToList()
+
+                    };
+                }
+            }
+
+
+
             SearchModel searchModel = model.SearchModel;
             DeckDetailsModel deckDetailsModel = model.DeckDetails;
 
             Validate(ref searchModel);
             Validate(ref deckDetailsModel);
-
-            
 
             if (!string.IsNullOrWhiteSpace(next))
             {
@@ -60,13 +79,19 @@ namespace MTG.Controllers
             }
             if (!string.IsNullOrWhiteSpace(save))
             {
+                deckDetailsModel.CardItems = Session["CardItems"] as List<CardItem>;
+
                 if (id == 0)
                 {
-                    //DataManager.CreateDeck(model.DeckDetails.DeckName, model.DeckDetails.DeckDescription, deckDetailsModel.CardItems);
+                    id = DataManager.CreateDeck(model.DeckDetails.DeckName, model.DeckDetails.DeckDescription, deckDetailsModel.CardItems);
+                    ClearSession();
+                    return RedirectToAction("Edit", "Decks", id);
                 }
                 else if (id >= 0)
                 {
-
+                    DataManager.SaveDeck(id, model.DeckDetails.DeckName, model.DeckDetails.DeckDescription, deckDetailsModel.CardItems);
+                    ClearSession();
+                    return RedirectToAction("Edit", "Decks", id);
                 }
             }
 
@@ -88,7 +113,7 @@ namespace MTG.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddToDeck(string add)
+        public ActionResult AddCard(string add, string remove)
         {
             List<CardItem> cards = Session["CardItems"] as List<CardItem>;
 
@@ -97,23 +122,49 @@ namespace MTG.Controllers
                 cards = new List<CardItem>();
             }
 
-            CardItem temp = cards.FirstOrDefault(x => x.CardID == add);
-            if (temp == null)
+            if (!string.IsNullOrWhiteSpace(add))
             {
-                MTGClient client = new MTGClient();
+                CardItem temp = cards.FirstOrDefault(x => x.CardID == add);
+                if (temp == null)
+                {
+                    MTGClient client = new MTGClient();
 
-                Card card = client.GetCard(add);
+                    Card card = client.GetCard(add);
 
-                cards.Add(new CardItem() { CardID = card.Id, Name = card.Name, Quantity = 1 });
+                    cards.Add(new CardItem() { CardID = card.Id, Name = card.Name, Quantity = 1 });
+                }
+                else
+                {
+                    temp.Quantity++;
+                }
+
+                Session["CardItems"] = cards;
+
+                return RedirectToAction("Edit");
+            }
+            else if (!string.IsNullOrWhiteSpace(remove))
+            {
+                CardItem temp = cards.FirstOrDefault(x => x.CardID == remove);
+                if (temp != null)
+                {
+                    if (temp.Quantity > 1)
+                    {
+                        temp.Quantity--;
+                    }
+                    else
+                    {
+                        cards.Remove(temp);
+                    }
+                }
+
+                Session["CardItems"] = cards;
+
+                return RedirectToAction("Edit");
             }
             else
             {
-                temp.Quantity++;
+                return RedirectToAction("Edit");
             }
-
-            Session["CardItems"] = cards;
-
-            return RedirectToAction("Edit");
         }
 
         public SearchModel Validate(ref SearchModel model)
@@ -157,6 +208,13 @@ namespace MTG.Controllers
                 }
             }
             ViewBag.CardImages = images;
+        }
+
+        public void ClearSession()
+        {
+            Session["SearchModel"] = null;
+            Session["DeckDetailsModel"] = null;
+            Session["CardItems"] = null;
         }
     }
 

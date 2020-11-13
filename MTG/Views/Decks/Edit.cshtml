@@ -39,10 +39,11 @@
                     <div style="margin: 5px 0px 5px 10px; float: left;">
                         <img src='@image.Value.ImageUri' />
                         <br />
-                        @*<button class="btn btn-default addcard" id="@image.Key" value="@image.Value.Name">Add</button>*@
-                        @using (Html.BeginForm("AddToDeck", "Decks"))
+                        @using (Html.BeginForm("AddCard", "Decks"))
                         {
-                            <button class="btn btn-default addcard" id="@image.Key" value="@image.Value.Id" name="add">Add</button>
+                            <div class="text-center">
+                                <button class="btn btn-default addcard" id="@image.Value.Id" value="@image.Value.Id" name="add">Add</button>
+                            </div>
                         }
                     </div>
                 }
@@ -66,25 +67,33 @@
                 <div class="form-group row">
                     <div class="col-md-12">
                         @Html.LabelFor(m => m.DeckDetails.DeckDescription)
-                        @Html.TextBoxFor(m => m.DeckDetails.DeckDescription, new { @class = "form-control", id = "deckdesc" })
+                        @Html.TextAreaFor(m => m.DeckDetails.DeckDescription, new { @class = "form-control", id = "deckdesc", rows = "10" })
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success" id="save" name="save" value="save">Save</button>
             }
         </div>
         <div class="panel-body" id="deck">
-            @if (Model.DeckDetails != null && Model.DeckDetails.CardItems != null)
+            @if (Model.DeckDetails != null && Model.DeckDetails.CardItems != null && Model.DeckDetails.CardItems.Count > 0)
             {
                 <table class="table table-hover">
                     <tr>
                         <th>Name</th>
                         <th>Quantity</th>
+                        <th>Add / Remove</th>
                     </tr>
-                    @foreach (var d in Model.DeckDetails.CardItems)
+                    @foreach (var item in Model.DeckDetails.CardItems)
                     {
                         <tr>
-                            <td>@d.Name</td>
-                            <td>@d.Quantity</td>
+                            <td>@item.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>
+                                @using (Html.BeginForm("AddCard", "Decks"))
+                                {
+                                    <button class="btn btn-primary" id="@item.CardID" value="@item.CardID" name="add"><span class="glyphicon glyphicon-plus"></span></button>
+                                    <button class="btn btn-danger" id="@item.CardID" value="@item.CardID" name="remove"><span class="glyphicon glyphicon-minus"></span></button>
+                                }
+                            </td>
                         </tr>
                     }
                 </table>
@@ -95,36 +104,6 @@
 
 @section Scripts {
     <script type="text/javascript">
-
-        $(document).ready(function () {
-
-            $(".addcard").click(function () {
-                @*var m = @Model;
-                var isObjectNotnull = (m != null && m.DeckDetails != null);
-                if (isObjectNotnull) {
-                    var deckid = m.DeckDetails.ID;
-                    $.ajax({
-                        url: ((deckid > 0) ? '/decks/edit/' + deckid : '/decks/edit/'),
-
-                    type: 'POST',
-                    data: {
-                        card: this.id
-                    },
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (data) {
-                        alert(data.success);
-                    },
-                    error: function () {
-                        alert("Error adding card to deck.");
-                    }
-                    });
-                alert(this.id);
-                }
-                var val = $(this).val();
-                alert(val + ": " + this.id);*@
-            });
-
-        });
 
     </script>
 
