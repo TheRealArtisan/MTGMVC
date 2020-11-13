@@ -17,123 +17,97 @@ namespace MTG.Controllers
             return View();
         }
         
-        public ActionResult CreateDeck(DeckModel model, string search, string next, string prev, string save)
+        public ActionResult EditDeck(DeckModel model, int id, string search, string next, string prev, string save)
         {
+            SearchModel searchModel = model.SearchModel;
+            DeckDetailsModel deckDetailsModel = model.DeckDetails;
+
+            Validate(ref searchModel);
+            Validate(ref deckDetailsModel);
+
+            if (id == 0)
+            {
+                deckDetailsModel.CardItems = Session["CardItems"] as List<CardItem>;
+            }
+            else
+            {
+                //deckDetailsModel.CardItems;
+            }
+
             if (!string.IsNullOrWhiteSpace(next))
             {
-                model = Session["DeckModel"] as DeckModel;
+                searchModel = Session["SearchModel"] as SearchModel;
 
-                if (model.SearchModel.Data.HasMore.HasValue)
+                if (searchModel.Data.HasMore.HasValue)
                 {
-                    if (model.SearchModel.Data.HasMore.Value)
+                    if (searchModel.Data.HasMore.Value)
                     {
-                        if (model.SearchModel.Page <= 1)
+                        if (searchModel.Page <= 1)
                         {
-                            model.SearchModel.Page = 1;
+                            searchModel.Page = 1;
                         }
-                        model.SearchModel.Page++;
+                        searchModel.Page++;
                     }
                 }
             }
             if (!string.IsNullOrWhiteSpace(prev))
             {
-                model = Session["DeckModel"] as DeckModel;
+                searchModel = Session["SearchModel"] as SearchModel;
 
-                if (model.SearchModel.Page <= 1)
+                if (searchModel.Page <= 1)
                 {
-                    model.SearchModel.Page = 1;
+                    searchModel.Page = 1;
                 }
 
-                model.SearchModel.Page--;
+                searchModel.Page--;
             }
-
-            SearchModel searchModel = model.SearchModel;
-            
             if (!string.IsNullOrWhiteSpace(search))
             {
 
             }
             if (!string.IsNullOrWhiteSpace(save))
             {
-                List<CardItem> cardItems = new List<CardItem>()
+                if (id == 0)
                 {
-                    new CardItem()
-                    {
-                         CardID = "00001234",
-                          Quantity = 4
-                    },
-                    new CardItem()
-                    {
-                         CardID = "00009876",
-                          Quantity = 4
-                    }
-                };
-                DataManager.CreateDeck(model.DeckDetails.DeckName, model.DeckDetails.DeckDescription, cardItems);
+                    DataManager.CreateDeck(model.DeckDetails.DeckName, model.DeckDetails.DeckDescription, deckDetailsModel.CardItems);
+                }
+                else if (id >= 0)
+                {
+
+                }
             }
-
-            Validate(ref searchModel);
-
+            
             searchModel.Search();
 
-            Session["DeckModel"] = model;
+            Session["SearchModel"] = searchModel;
+            Session["DeckDetailsModel"] = deckDetailsModel;
+            Session["CardItems"] = deckDetailsModel.CardItems;
 
             SetImages(searchModel.Data);
 
             return View("Edit", model);
         }
         
-        public ActionResult EditDeck(int id)
-        {
-            return View("Edit");
-        }
-
-        //public ActionResult CardPartial(DeckModel model, string search, string next, string prev, string save)
+        //public ActionResult EditDeck(int id)
         //{
-        //    SearchModel searchModel = model.SearchModel;
-
-        //    if (!string.IsNullOrWhiteSpace(next))
+        //    if (id == 0)
         //    {
-        //        model = Session["DeckModel"] as DeckModel;
-        //        searchModel.Page++;
+        //        RedirectToAction("CreateDeck");
         //    }
-        //    if (!string.IsNullOrWhiteSpace(prev))
-        //    {
-        //        model = Session["DeckModel"] as DeckModel;
-        //        searchModel.Page--;
-        //    }
-        //    if (!string.IsNullOrWhiteSpace(search))
-        //    {
-
-        //    }
-        //    if (!string.IsNullOrWhiteSpace(save))
-        //    {
-        //        List<CardItem> cardItems = new List<CardItem>()
-        //        {
-        //            new CardItem()
-        //            {
-        //                 CardID = "00001234",
-        //                  Quantity = 4
-        //            },
-        //            new CardItem()
-        //            {
-        //                 CardID = "00009876",
-        //                  Quantity = 4
-        //            }
-        //        };
-        //        DataManager.CreateDeck(model.DeckDetails.DeckName, model.DeckDetails.DeckDescription, cardItems);
-        //    }
-
-        //    Validate(ref searchModel);
-
-        //    searchModel.Search();
-
-        //    Session["DeckModel"] = model;
-
-        //    SetImages(searchModel.Data);
-
-        //    return PartialView("CardPartial", model);
+        //    return View("Edit");
         //}
 
+        [HttpPost]
+        public ActionResult AddToDeck(int id, string card)
+        {
+            if (id == 0)
+            {
+
+            }
+            string cardid = card;
+            return View();
+        }
+        
         public SearchModel Validate(ref SearchModel model)
         {
             if (SearchModel.IsEmpty(model))
@@ -141,7 +115,21 @@ namespace MTG.Controllers
                 model = Session["SearchModel"] as SearchModel;
                 if (SearchModel.IsEmpty(model))
                 {
-                    model = new SearchModel() { Format = Format.Standard, };
+                    model = new SearchModel() { Format = Format.Standard };
+                }
+            }
+
+            return model;
+        }
+
+        public DeckDetailsModel Validate(ref DeckDetailsModel model)
+        {
+            if (DeckDetailsModel.IsEmpty(model))
+            {
+                model = Session["DeckDetailsModel"] as DeckDetailsModel;
+                if (DeckDetailsModel.IsEmpty(model))
+                {
+                    model = new DeckDetailsModel();
                 }
             }
 

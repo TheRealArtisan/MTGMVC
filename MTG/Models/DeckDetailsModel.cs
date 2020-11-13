@@ -9,7 +9,7 @@ namespace MTG.Models
 {
     public class DeckDetailsModel
     {
-        public int ID { get; set; }
+        public int ID { get; set; } = 0;
         [Display(Name = "Deck Name")]
         [StringLength(100, ErrorMessage = "Text must be under 100 characters.")]
         public string DeckName { get; set; }
@@ -21,6 +21,31 @@ namespace MTG.Models
         public string DeckDescription { get; set; }
         
         public List<CardItem> CardItems { get; set; }
+
+        internal static bool IsEmpty(DeckDetailsModel model)
+        {
+            try
+            {
+                if (model == null)
+                {
+                    return true;
+                }
+                if (string.IsNullOrWhiteSpace(model.DeckName) &&
+                string.IsNullOrWhiteSpace(model.DeckDescription) &&
+                (model.CardItems == null || model.CardItems.Count == 0))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                return true;
+            }
+        }
     }
 
     public class CardItem

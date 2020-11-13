@@ -12,20 +12,20 @@
         @using (Html.BeginForm("Index", "Cards"))
         {
             @Html.AntiForgeryToken()
-        <div class="form-group row">
-            <div class="col-md-4">
-                @Html.LabelFor(m => m.CardName)
-                @Html.TextBoxFor(m => m.CardName, new { @class = "form-control", id = "cardname" })
+            <div class="form-group row">
+                <div class="col-md-4">
+                    @Html.LabelFor(m => m.CardName)
+                    @Html.TextBoxFor(m => m.CardName, new { @class = "form-control", id = "cardname" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(m => m.CardText)
+                    @Html.TextBoxFor(m => m.CardText, new { @class = "form-control", id = "cardtext" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(m => m.Format)
+                    @Html.DropDownListFor(m => m.Format, new SelectList(Enum.GetValues(typeof(Format))), new { @class = "form-control", id = "format" })
+                </div>
             </div>
-            <div class="col-md-4"> 
-                @Html.LabelFor(m => m.CardText)
-                @Html.TextBoxFor(m => m.CardText, new { @class = "form-control", id = "cardtext" })
-            </div>
-            <div class="col-md-4">
-                @Html.LabelFor(m => m.Format)
-                @Html.DropDownListFor(m => m.Format, new SelectList(Enum.GetValues(typeof(Format))), new { @class = "form-control", id = "format" })
-            </div>
-        </div>
             <button type="submit" class="btn btn-success" id="search" name="search" value="search">Search</button>
             <button type="submit" class="btn btn-info" id="prev" name="prev" value="prev">Previous</button>
             <button type="submit" class="btn btn-info" id="next" name="next" value="next">Next</button>
@@ -36,9 +36,11 @@
         <div>
             @foreach (var image in ViewBag.CardImages)
             {
-                <a href='@image.Value.Item2'>
-                    <img src='@image.Value.Item1' />
-                </a>
+                <div style="margin: 5px 0px 5px 10px; float: left;">
+                    <a href='@image.Value.Item2'>
+                        <img src='@image.Value.Item1' />
+                    </a>
+                </div>
             }
         </div>
     </div>

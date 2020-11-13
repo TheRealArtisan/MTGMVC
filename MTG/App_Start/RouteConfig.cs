@@ -13,16 +13,22 @@ namespace MTG
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                name: "Edit Deck",
-                url: "Decks/Edit/{id}",
-                defaults: new { controller = "Decks", action = "EditDeck" }
-            );
+            //routes.MapRoute(
+            //    name: "Create Deck",
+            //    url: "Decks/Edit",
+            //    defaults: new { controller = "Decks", action = "CreateDeck" }
+            //);
 
             routes.MapRoute(
                 name: "Create Deck",
                 url: "Decks/Edit",
-                defaults: new { controller = "Decks", action = "CreateDeck" }
+                defaults: new { controller = "Decks", action = "EditDeck", id = 0 }
+            );
+
+            routes.MapRoute(
+                name: "Edit Deck",
+                url: "Decks/Edit/{id}",
+                defaults: new { controller = "Decks", action = "EditDeck" }
             );
 
             routes.MapRoute(
