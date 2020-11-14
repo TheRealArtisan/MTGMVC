@@ -14,6 +14,8 @@ namespace MTG.Controllers
     {
         public ActionResult Index()
         {
+            ClearSession();
+
             var decks =  DataManager.GetDecks();
 
             DecksModel model = new DecksModel();
@@ -21,6 +23,13 @@ namespace MTG.Controllers
             model.Decks = decks.Select(x => new DeckItemModel() { DeckId = x.Id, DeckName = x.DeckName }).ToList();
 
             return View(model);
+        }
+
+        public ActionResult CreateDeck()
+        {
+            ClearSession();
+
+            return RedirectToAction("Edit", new { id = 0 });
         }
 
         public ActionResult EditDeck(DeckModel model, int id, string search, string next, string prev, string save)
