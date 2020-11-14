@@ -171,6 +171,7 @@
     </Compile>
     <Compile Include="Models\DeckDetailsModel.cs" />
     <Compile Include="Models\DeckModel.cs" />
+    <Compile Include="Models\DecksModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -9,6 +9,15 @@ namespace MTG.DataManagement
 {
     public static class DataManager
     {
+        public static List<DeckItemDataModel> GetDecks()
+        {
+            string sql = "SELECT * FROM dbo.Deck";
+
+            List<DeckItemDataModel> decks = LoadData<DeckItemDataModel>(sql);
+
+            return decks;
+        }
+
         public static int CreateDeck(string deckName, string deckDesc, List<Models.CardItem> cards)
         {
             DeckDataModel deck = new DeckDataModel()
@@ -27,10 +36,11 @@ namespace MTG.DataManagement
                 {
                     DeckId = deckId,
                     CardId = card.CardID,
-                    CardQuantity = card.Quantity
+                    CardQuantity = card.Quantity,
+                    CardName = card.Name
                 };
 
-                string sqlCard = @"insert into dbo.DeckCard (DeckId, CardId, CardQuantity) output INSERTED.Id values (@DeckId, @CardId, @CardQuantity);";
+                string sqlCard = @"insert into dbo.DeckCard (DeckId, CardId, CardQuantity, CardName) output INSERTED.Id values (@DeckId, @CardId, @CardQuantity, @CardName);";
 
                 int deckCardId = SaveData(sqlCard, deckCard);
             }
@@ -42,7 +52,7 @@ namespace MTG.DataManagement
         {
             DeckDataModel deck = new DeckDataModel()
             {
-                DeckId = deckId,
+                Id = deckId,
                 DeckName = deckName,
                 DeckDescription = deckDesc
             };
@@ -82,7 +92,6 @@ namespace MTG.DataManagement
             return new Tuple<DeckDataModel, List<DeckCardDataModel>>(deck, cards);
         }
 
-
         private static string GetConnectionString(string connection = "MTGDB")
         {
             return ConfigurationManager.ConnectionStrings[connection].ConnectionString;
@@ -112,9 +121,15 @@ namespace MTG.DataManagement
             }
         }
 
+        public class DeckItemDataModel
+        {
+            public int Id { get; set; }
+            public string DeckName { get; set; }
+        }
+
         public class DeckDataModel
         {
-            public int DeckId { get; set; }
+            public int Id { get; set; }
             public string DeckName { get; set; }
             public string DeckDescription { get; set; }
         }

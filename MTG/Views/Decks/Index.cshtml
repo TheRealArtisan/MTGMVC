@@ -1,31 +1,30 @@
 ﻿
 @using MTG.Data.Models
 
-@*model*@
+@model MTG.Models.DecksModel
 
 @{
     ViewBag.Title = "Decks";
 }
 
-<div class="col-md-8">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            
-        </div>
-        <div class="panel-body" id="results">
-            
-        </div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h2>Decks</h2>
+    </div>
+    <div class="panel-body" id="results">
+        <table class="table table-hover">
+            <tr>
+                <th>Name</th>
+            </tr>
+            @foreach (var deck in Model.Decks)
+            {
+                <tr>
+                    <td>@Html.ActionLink(deck.DeckName, "EditDeck", "Decks", new { id = deck.DeckId }, null)</td>
+                </tr>
+            }
+        </table>
     </div>
 </div>
-<div class="col-md-4">
-    <div class="panel panel-info">
-        <div class="panel-heading">
 
-        </div>
-        <div class="panel-body" id="deck">
-
-        </div>
-    </div>
-</div>
 
 

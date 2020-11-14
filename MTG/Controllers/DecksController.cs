@@ -14,11 +14,23 @@ namespace MTG.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            var decks =  DataManager.GetDecks();
+
+            DecksModel model = new DecksModel();
+
+            model.Decks = decks.Select(x => new DeckItemModel() { DeckId = x.Id, DeckName = x.DeckName }).ToList();
+
+            return View(model);
         }
 
         public ActionResult EditDeck(DeckModel model, int id, string search, string next, string prev, string save)
         {
+            SearchModel searchModel = model.SearchModel;
+            DeckDetailsModel deckDetailsModel = model.DeckDetails;
+
+            Validate(ref searchModel);
+            Validate(ref deckDetailsModel);
+
             if (id > 0)
             {
                 DeckDetailsModel deckDetails = Session["DeckDetailsModel"] as DeckDetailsModel;
@@ -32,19 +44,16 @@ namespace MTG.Controllers
                     {
                         DeckName = deck.DeckName,
                         DeckDescription = deck.DeckDescription,
-                        CardItems = cards.Select(x => new CardItem() { CardID = x.CardId, Quantity = x.CardQuantity, Name = x.CardName}).ToList()
-
+                        CardItems = cards.Select(x => new CardItem() { CardID = x.CardId, Quantity = x.CardQuantity, Name = x.CardName }).ToList()
                     };
+
+                    deckDetailsModel = deckDetails;
                 }
             }
-
-
-
-            SearchModel searchModel = model.SearchModel;
-            DeckDetailsModel deckDetailsModel = model.DeckDetails;
-
-            Validate(ref searchModel);
-            Validate(ref deckDetailsModel);
+            else
+            {
+                deckDetailsModel.CardItems = Session["CardItems"] as List<CardItem>;
+            }
 
             if (!string.IsNullOrWhiteSpace(next))
             {
@@ -94,9 +103,6 @@ namespace MTG.Controllers
                     return RedirectToAction("Edit", "Decks", id);
                 }
             }
-
-            var temp = Session["CardItems"] as List<CardItem>;
-            deckDetailsModel.CardItems = temp;
 
             searchModel.Search();
 
